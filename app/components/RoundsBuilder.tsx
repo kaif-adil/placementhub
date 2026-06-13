@@ -1,6 +1,6 @@
 'use client'
 
-import { Round } from '../submit/page'
+import type { Round } from '../lib/types'
 
 type Props = {
   rounds: Round[]

@@ -117,7 +117,7 @@ export default function RoundsBuilder({ rounds, onChange }: Props) {
           {round.type !== 'Resume Shortlisting' && (
             <div>
               <div className="flex items-center justify-between mb-2">
-                <label className="text-xs font-medium text-gray-600">Questions Asked</label>
+                <label className="text-xs font-medium text-gray-600">Types of Questions Asked</label>
                 <button
                   onClick={() => addQuestion(rIndex)}
                   className="text-xs text-blue-600 hover:text-blue-700"

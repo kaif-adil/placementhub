@@ -102,7 +102,7 @@ const fetchExperiences = async () => {
             className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="">All Branches</option>
-            {['CSE', 'ECE', 'EEE', 'ME', 'CE', 'CHE', 'MME', 'BT', 'MNC', 'IT'].map(b => (
+            {['CSE', 'ECE', 'EEE', 'ME', 'CE', 'CHE', 'MME', 'BT', 'MNC'].map(b => (
               <option key={b} value={b}>{b}</option>
             ))}
           </select>

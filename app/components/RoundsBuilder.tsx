@@ -7,7 +7,7 @@ type Props = {
   onChange: (rounds: Round[]) => void
 }
 
-const ROUND_TYPES = ['OA', 'Technical', 'HR', 'Group Discussion', 'Managerial']
+const ROUND_TYPES = ['Resume Shortlisting', 'OA', 'Technical', 'HR', 'Group Discussion', 'Managerial']
 
 export default function RoundsBuilder({ rounds, onChange }: Props) {
 
@@ -99,64 +99,69 @@ export default function RoundsBuilder({ rounds, onChange }: Props) {
             </div>
           )}
 
-          {/* Duration */}
-          <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">Duration (minutes)</label>
-            <input
-              type="number"
-              placeholder="e.g. 90"
-              value={round.duration_mins || ''}
-              onChange={(e) => updateRound(rIndex, 'duration_mins', Number(e.target.value))}
-              className="w-32 border border-gray-300 rounded-md px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-
-          {/* Questions */}
-          <div>
-            <div className="flex items-center justify-between mb-2">
-              <label className="text-xs font-medium text-gray-600">Questions Asked</label>
-              <button
-                onClick={() => addQuestion(rIndex)}
-                className="text-xs text-blue-600 hover:text-blue-700"
-              >
-                + Add
-              </button>
+          {/* Duration — hidden for Resume Shortlisting */}
+          {round.type !== 'Resume Shortlisting' && (
+            <div>
+              <label className="block text-xs font-medium text-gray-600 mb-1">Duration (minutes)</label>
+              <input
+                type="number"
+                placeholder="e.g. 90"
+                value={round.duration_mins || ''}
+                onChange={(e) => updateRound(rIndex, 'duration_mins', Number(e.target.value))}
+                className="w-32 border border-gray-300 rounded-md px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
             </div>
+          )}
 
-            <div className="space-y-2">
-              {round.questions.map((q, qIndex) => (
-                <div key={qIndex} className="flex gap-2">
-                  <input
-                    type="text"
-                    placeholder={`Question ${qIndex + 1}`}
-                    value={q}
-                    onChange={(e) => updateQuestion(rIndex, qIndex, e.target.value)}
-                    className="flex-1 border border-gray-300 rounded-md px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                  {round.questions.length > 1 && (
-                    <button
-                      onClick={() => removeQuestion(rIndex, qIndex)}
-                      className="text-gray-400 hover:text-red-500 text-lg leading-none"
-                    >
-                      ×
-                    </button>
-                  )}
-                </div>
-              ))}
+          {/* Questions — hidden for Resume Shortlisting */}
+          {round.type !== 'Resume Shortlisting' && (
+            <div>
+              <div className="flex items-center justify-between mb-2">
+                <label className="text-xs font-medium text-gray-600">Questions Asked</label>
+                <button
+                  onClick={() => addQuestion(rIndex)}
+                  className="text-xs text-blue-600 hover:text-blue-700"
+                >
+                  + Add
+                </button>
+              </div>
+              <div className="space-y-2">
+                {round.questions.map((q, qIndex) => (
+                  <div key={qIndex} className="flex gap-2">
+                    <input
+                      type="text"
+                      placeholder={`Question ${qIndex + 1}`}
+                      value={q}
+                      onChange={(e) => updateQuestion(rIndex, qIndex, e.target.value)}
+                      className="flex-1 border border-gray-300 rounded-md px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    />
+                    {round.questions.length > 1 && (
+                      <button
+                        onClick={() => removeQuestion(rIndex, qIndex)}
+                        className="text-gray-400 hover:text-red-500 text-lg leading-none"
+                      >
+                        ×
+                      </button>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
 
-          {/* Tips */}
-          <div>
-            <label className="block text-xs font-medium text-gray-600 mb-1">Tips for this round</label>
-            <textarea
-              rows={2}
-              placeholder="What would you tell someone about this specific round?"
-              value={round.tips}
-              onChange={(e) => updateRound(rIndex, 'tips', e.target.value)}
-              className="w-full border border-gray-300 rounded-md px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
+          {/* Tips — hidden for Resume Shortlisting */}
+          {round.type !== 'Resume Shortlisting' && (
+            <div>
+              <label className="block text-xs font-medium text-gray-600 mb-1">Tips for this round</label>
+              <textarea
+                rows={2}
+                placeholder="What would you tell someone about this specific round?"
+                value={round.tips}
+                onChange={(e) => updateRound(rIndex, 'tips', e.target.value)}
+                className="w-full border border-gray-300 rounded-md px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+          )}
 
         </div>
       ))}

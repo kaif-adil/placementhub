@@ -17,6 +17,7 @@ export default function SubmitPage() {
   const [placementYear, setPlacementYear] = useState(new Date().getFullYear())
   const [branch, setBranch] = useState('')
   const [result, setResult] = useState('')
+  const [placementType, setPlacementType] = useState('')
   const [rounds, setRounds] = useState<Round[]>([
     { type: 'OA', questions: [''], tips: '' }
   ])
@@ -49,6 +50,7 @@ export default function SubmitPage() {
       placement_year: placementYear,
       branch,
       result,
+      placement_type: placementType,
       rounds,
       tips,
       status: 'published',
@@ -110,7 +112,8 @@ export default function SubmitPage() {
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Year *</label>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Placement Year *</label>
+              <p className="text-xs text-gray-400 mb-1">The year you appeared for this company's process</p>
               <select
                 value={placementYear}
                 onChange={(e) => setPlacementYear(Number(e.target.value))}
@@ -135,6 +138,24 @@ export default function SubmitPage() {
               </select>
             </div>
           </div>
+          <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Placement Type *</label>
+          <div className="flex gap-3">
+            {['on-campus', 'off-campus', 'ppo'].map((t) => (
+              <button
+                key={t}
+                onClick={() => setPlacementType(t)}
+                className={`px-4 py-2 rounded-lg text-sm font-medium border transition
+                  ${placementType === t
+                    ? 'bg-blue-600 text-white border-blue-600'
+                    : 'border-gray-300 text-gray-600 hover:bg-gray-50'
+                  }`}
+              >
+                {t === 'on-campus' ? 'On Campus' : t === 'off-campus' ? 'Off Campus' : 'PPO'}
+              </button>
+            ))}
+          </div>
+        </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Result *</label>
             <div className="flex gap-3">
@@ -161,7 +182,7 @@ export default function SubmitPage() {
             </button>
             <button
               onClick={() => setStep(2)}
-              disabled={!companyId || !role || !branch || !result}
+              disabled={!companyId || !role || !branch || !result || !placementType}
               className="px-6 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed transition"
             >
               Next →
@@ -172,7 +193,16 @@ export default function SubmitPage() {
 
       {step === 2 && (
         <div className="space-y-5">
-          <RoundsBuilder rounds={rounds} onChange={setRounds} />
+          {placementType === 'ppo' ? (
+            <div className="text-center py-10 border border-dashed border-gray-300 rounded-xl">
+              <p className="text-gray-500 font-medium">PPO — No interview rounds</p>
+              <p className="text-sm text-gray-400 mt-1">
+                Skip to the next step to share your tips.
+              </p>
+            </div>
+          ) : (
+            <RoundsBuilder rounds={rounds} onChange={setRounds} />
+          )}
           <div className="flex justify-between pt-4">
             <button onClick={() => setStep(1)} className="px-6 py-2 border border-gray-300 text-gray-600 rounded-lg text-sm hover:bg-gray-50 transition">
               ← Back

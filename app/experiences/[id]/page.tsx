@@ -69,8 +69,10 @@ export default function ExperiencePage() {
     <div className="max-w-3xl mx-auto px-4 py-10">
 
       {/* Back link */}
-      <a href="/search" className="text-sm text-blue-600 hover:underline mb-6 block">
-        ← Back to search
+      <a   href="/search"
+        className="inline-flex items-center gap-2 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-lg transition mb-8"
+      >
+        ← Back to Experiences
       </a>
 
       {/* Header */}

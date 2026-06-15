@@ -90,6 +90,9 @@ export default function CompanyCombobox({ onSelect }: Props) {
         onFocus={() => setOpen(true)}
         className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
+      <p className="text-xs text-gray-400 mt-1">
+        Type to search. If your company doesn't appear, type the name and click "+ Add".
+      </p>
 
       {open && (query.length > 0) && (
         <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg overflow-hidden">

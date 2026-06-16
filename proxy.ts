@@ -29,7 +29,7 @@ export async function proxy(request: NextRequest) {
 
     // Protect the /submit route
     if (!user && request.nextUrl.pathname.startsWith('/submit')) {
-      return NextResponse.redirect(new URL('/', request.url))
+      return NextResponse.redirect(new URL('/?login_required=true', request.url))
     }
 
   } catch (e) {

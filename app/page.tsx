@@ -1,6 +1,44 @@
+'use client'
+
+import { useEffect, useState } from 'react'
+import { useSearchParams } from 'next/navigation'
+import { createClient } from './lib/supabase'
+
 export default function Home() {
+  const searchParams = useSearchParams()
+  const [showLoginMessage, setShowLoginMessage] = useState(false)
+  const supabase = createClient()
+
+  useEffect(() => {
+    if (searchParams.get('login_required') === 'true') {
+      setShowLoginMessage(true)
+    }
+  }, [searchParams])
+
+  const handleSignIn = async () => {
+    await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`
+      }
+    })
+  }
+
   return (
     <main className="max-w-3xl mx-auto px-4 py-16 text-center">
+
+      {showLoginMessage && (
+        <div className="mb-8 bg-amber-50 border border-amber-200 text-amber-800 text-sm px-4 py-3 rounded-lg flex items-center justify-between flex-wrap gap-2">
+          <span>Please sign in to share your experience.</span>
+          <button
+            onClick={handleSignIn}
+            className="text-sm font-medium bg-amber-600 text-white px-3 py-1.5 rounded-lg hover:bg-amber-700 transition"
+          >
+            Sign in with Google
+          </button>
+        </div>
+      )}
+
       <h1 className="text-4xl font-bold text-gray-900 mb-4">
         Placement<span className="text-blue-600">Hub</span>
       </h1>

@@ -36,21 +36,34 @@ export default function ProfilePage() {
     setLoading(false)
   }
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (exp: any) => {
     const confirmed = window.confirm(
-      'Are you sure you want to delete this experience? This cannot be undone.'
+      'Delete this experience? A draft with this data will be saved so you can resubmit easily if needed.'
     )
     if (!confirmed) return
 
-    setDeleting(id)
+    setDeleting(exp.id)
+
+    // Save a draft before deleting, so resubmitting is easy
+    localStorage.setItem('ph_draft', JSON.stringify({
+      companyId: exp.company_id,
+      companyName: exp.companies?.name || '',
+      role: exp.role,
+      placementYear: exp.placement_year,
+      branch: exp.branch,
+      result: exp.result,
+      placementType: exp.placement_type,
+      rounds: exp.rounds,
+      tips: exp.tips,
+    }))
 
     const { error } = await supabase
       .from('experiences')
       .delete()
-      .eq('id', id)
+      .eq('id', exp.id)
 
     if (!error) {
-      setExperiences(prev => prev.filter(e => e.id !== id))
+      setExperiences(prev => prev.filter(e => e.id !== exp.id))
     }
 
     setDeleting(null)
@@ -144,7 +157,7 @@ export default function ProfilePage() {
                   View
                 </a>
                 <button
-                  onClick={() => handleDelete(exp.id)}
+                  onClick={() => handleDelete(exp)}
                   disabled={deleting === exp.id}
                   className="text-sm text-red-500 hover:text-red-700 disabled:opacity-40 transition"
                 >

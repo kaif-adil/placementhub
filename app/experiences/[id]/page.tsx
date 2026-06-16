@@ -89,7 +89,7 @@ export default function ExperiencePage() {
           )}
           <span>·</span>
           <span className={exp.result === 'selected' ? 'text-green-600 font-medium' : 'text-red-500 font-medium'}>
-            {exp.result}
+            {exp.result === 'rejected' ? 'Not Selected' : exp.result}
           </span>
           <span>·</span>
           <span className="inline-flex items-center gap-1 text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">

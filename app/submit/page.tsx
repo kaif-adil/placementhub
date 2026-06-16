@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import CompanyCombobox from '../components/CompanyCombobox'
 import RoundsBuilder from '../components/RoundsBuilder'
 import { createClient } from '../lib/supabase'
@@ -13,6 +13,7 @@ export default function SubmitPage() {
 
   const [step, setStep] = useState(1)
   const [companyId, setCompanyId] = useState('')
+  const [companyName, setCompanyName] = useState('')
   const [role, setRole] = useState('')
   const [placementYear, setPlacementYear] = useState(new Date().getFullYear())
   const [branch, setBranch] = useState('')
@@ -24,6 +25,25 @@ export default function SubmitPage() {
   const [tips, setTips] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
+  const [draftSaved, setDraftSaved] = useState(false)
+
+  useEffect(() => {
+    const saved = localStorage.getItem('ph_draft')
+    if (saved) {
+      try {
+        const draft = JSON.parse(saved)
+        if (draft.companyId) setCompanyId(draft.companyId)
+        if (draft.companyName) setCompanyName(draft.companyName)
+        if (draft.role) setRole(draft.role)
+        if (draft.placementYear) setPlacementYear(draft.placementYear)
+        if (draft.branch) setBranch(draft.branch)
+        if (draft.result) setResult(draft.result)
+        if (draft.placementType) setPlacementType(draft.placementType)
+        if (draft.rounds) setRounds(draft.rounds)
+        if (draft.tips) setTips(draft.tips)
+      } catch (e) {}
+    }
+  }, [])
 
   const handleSubmit = async () => {
     setSubmitting(true)
@@ -68,8 +88,10 @@ export default function SubmitPage() {
 
   const saveDraft = () => {
     localStorage.setItem('ph_draft', JSON.stringify({
-      companyId, role, placementYear, branch, result, rounds, tips
+      companyId, companyName, role, placementYear, branch, result, placementType, rounds, tips
     }))
+    setDraftSaved(true)
+    setTimeout(() => setDraftSaved(false), 2000)
   }
 
   return (
@@ -98,18 +120,26 @@ export default function SubmitPage() {
         <div className="space-y-5">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Company *</label>
-            <CompanyCombobox onSelect={(id) => setCompanyId(id)} />
+            <CompanyCombobox
+              onSelect={(id, name) => { setCompanyId(id); setCompanyName(name) }}
+              initialName={companyName}
+            />
+            <p className="text-xs text-gray-400 mt-1">
+              Type to search. If your company doesn't appear, type the name and click "+ Add".
+            </p>
           </div>
+
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Role *</label>
             <input
               type="text"
-              placeholder="e.g. SDE Intern, SDE-1, Data Analyst, GET, etc."
+              placeholder="e.g. SDE Intern, SDE-1, Data Analyst"
               value={role}
               onChange={(e) => setRole(e.target.value)}
               className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
+
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Placement Year *</label>
@@ -124,6 +154,7 @@ export default function SubmitPage() {
                 ))}
               </select>
             </div>
+
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Branch *</label>
               <select
@@ -138,24 +169,26 @@ export default function SubmitPage() {
               </select>
             </div>
           </div>
+
           <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Placement Type *</label>
-          <div className="flex gap-3">
-            {['on-campus', 'off-campus', 'ppo'].map((t) => (
-              <button
-                key={t}
-                onClick={() => setPlacementType(t)}
-                className={`px-4 py-2 rounded-lg text-sm font-medium border transition
-                  ${placementType === t
-                    ? 'bg-blue-600 text-white border-blue-600'
-                    : 'border-gray-300 text-gray-600 hover:bg-gray-50'
-                  }`}
-              >
-                {t === 'on-campus' ? 'On Campus' : t === 'off-campus' ? 'Off Campus' : 'PPO'}
-              </button>
-            ))}
+            <label className="block text-sm font-medium text-gray-700 mb-1">Placement Type *</label>
+            <div className="flex gap-3">
+              {['on-campus', 'off-campus', 'ppo'].map((t) => (
+                <button
+                  key={t}
+                  onClick={() => setPlacementType(t)}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium border transition
+                    ${placementType === t
+                      ? 'bg-blue-600 text-white border-blue-600'
+                      : 'border-gray-300 text-gray-600 hover:bg-gray-50'
+                    }`}
+                >
+                  {t === 'on-campus' ? 'On Campus' : t === 'off-campus' ? 'Off Campus' : 'PPO'}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
+
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">Result *</label>
             <div className="flex gap-3">
@@ -171,14 +204,15 @@ export default function SubmitPage() {
                       : 'border-gray-300 text-gray-600 hover:bg-gray-50'
                     }`}
                 >
-                  {r.charAt(0).toUpperCase() + r.slice(1)}
+                  {r === 'rejected' ? 'Not Selected' : r.charAt(0).toUpperCase() + r.slice(1)}
                 </button>
               ))}
             </div>
           </div>
-          <div className="flex justify-between pt-4">
+
+          <div className="flex justify-between items-center pt-4">
             <button onClick={saveDraft} className="text-sm text-gray-500 hover:text-gray-700">
-              Save draft
+              {draftSaved ? '✓ Draft saved' : 'Save draft'}
             </button>
             <button
               onClick={() => setStep(2)}
@@ -197,23 +231,32 @@ export default function SubmitPage() {
             <div className="text-center py-10 border border-dashed border-gray-300 rounded-xl">
               <p className="text-gray-500 font-medium">PPO — No interview rounds</p>
               <p className="text-sm text-gray-400 mt-1">
-                Skip to the next step to share your tips.
+                PPOs are offered based on internship performance. Skip to the next step to share your tips.
               </p>
             </div>
           ) : (
             <RoundsBuilder rounds={rounds} onChange={setRounds} />
           )}
-          <div className="flex justify-between pt-4">
-            <button onClick={() => setStep(1)} className="px-6 py-2 border border-gray-300 text-gray-600 rounded-lg text-sm hover:bg-gray-50 transition">
+
+          <div className="flex justify-between items-center pt-4">
+            <button
+              onClick={() => setStep(1)}
+              className="px-6 py-2 border border-gray-300 text-gray-600 rounded-lg text-sm hover:bg-gray-50 transition"
+            >
               ← Back
             </button>
-            <button
-              onClick={() => setStep(3)}
-              disabled={rounds.length === 0}
-              className="px-6 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed transition"
-            >
-              Next →
-            </button>
+            <div className="flex items-center gap-4">
+              <button onClick={saveDraft} className="text-sm text-gray-500 hover:text-gray-700">
+                {draftSaved ? '✓ Draft saved' : 'Save draft'}
+              </button>
+              <button
+                onClick={() => setStep(3)}
+                disabled={rounds.length === 0}
+                className="px-6 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed transition"
+              >
+                Next →
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -224,34 +267,47 @@ export default function SubmitPage() {
             <label className="block text-sm font-medium text-gray-700 mb-1">General Tips & Advice</label>
             <textarea
               rows={6}
-              placeholder="What would you tell someone preparing for this company?"
+              placeholder="What would you tell someone preparing for this company? What worked for you? What surprised you?"
               value={tips}
               onChange={(e) => setTips(e.target.value)}
               className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
+
           <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
             <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-3">Preview</p>
+            <p className="text-sm text-gray-700"><span className="font-medium">Company:</span> {companyName}</p>
             <p className="text-sm text-gray-700"><span className="font-medium">Role:</span> {role}</p>
             <p className="text-sm text-gray-700"><span className="font-medium">Year:</span> {placementYear}</p>
             <p className="text-sm text-gray-700"><span className="font-medium">Branch:</span> {branch}</p>
+            <p className="text-sm text-gray-700"><span className="font-medium">Type:</span> {placementType}</p>
             <p className="text-sm text-gray-700"><span className="font-medium">Result:</span> {result}</p>
             <p className="text-sm text-gray-700"><span className="font-medium">Rounds:</span> {rounds.length}</p>
           </div>
+
           {error && (
             <p className="text-sm text-red-600 bg-red-50 px-4 py-2 rounded-lg">{error}</p>
           )}
-          <div className="flex justify-between pt-4">
-            <button onClick={() => setStep(2)} className="px-6 py-2 border border-gray-300 text-gray-600 rounded-lg text-sm hover:bg-gray-50 transition">
+
+          <div className="flex justify-between items-center pt-4">
+            <button
+              onClick={() => setStep(2)}
+              className="px-6 py-2 border border-gray-300 text-gray-600 rounded-lg text-sm hover:bg-gray-50 transition"
+            >
               ← Back
             </button>
-            <button
-              onClick={handleSubmit}
-              disabled={submitting}
-              className="px-6 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 disabled:opacity-40 transition"
-            >
-              {submitting ? 'Submitting...' : 'Submit Experience ✓'}
-            </button>
+            <div className="flex items-center gap-4">
+              <button onClick={saveDraft} className="text-sm text-gray-500 hover:text-gray-700">
+                {draftSaved ? '✓ Draft saved' : 'Save draft'}
+              </button>
+              <button
+                onClick={handleSubmit}
+                disabled={submitting}
+                className="px-6 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 disabled:opacity-40 transition"
+              >
+                {submitting ? 'Submitting...' : 'Submit Experience ✓'}
+              </button>
+            </div>
           </div>
         </div>
       )}

@@ -11,12 +11,16 @@ type Company = {
 }
 
 type Props = {
-  onSelect: (id: string) => void
+  onSelect: (id: string, name: string) => void
+  initialName?: string
 }
 
-export default function CompanyCombobox({ onSelect }: Props) {
+export default function CompanyCombobox({ onSelect, initialName }: Props) {
   const supabase = createClient()
-  const [query, setQuery] = useState('')
+  const [query, setQuery] = useState(initialName || '')
+  useEffect(() => {
+    if (initialName) setQuery(initialName)
+  }, [initialName])
   const [companies, setCompanies] = useState<Company[]>([])
   const [selected, setSelected] = useState<Company | null>(null)
   const [open, setOpen] = useState(false)
@@ -55,7 +59,7 @@ export default function CompanyCombobox({ onSelect }: Props) {
     setSelected(company)
     setQuery(company.name)
     setOpen(false)
-    onSelect(company.id)
+    onSelect(company.id, company.name)
   }
 
   const handleCreate = async () => {

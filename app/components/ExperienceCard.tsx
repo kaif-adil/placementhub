@@ -40,7 +40,7 @@ export default function ExperienceCard({ experience }: Props) {
           {experience.companies?.name}
         </span>
         <span className={`text-xs font-medium px-2 py-1 rounded-full ${resultColor}`}>
-          {experience.result}
+          {experience.result === 'rejected' ? 'Not Selected' : experience.result}
         </span>
       </div>
 

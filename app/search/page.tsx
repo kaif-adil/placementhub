@@ -114,7 +114,7 @@ const fetchExperiences = async () => {
           >
             <option value="">All Results</option>
             <option value="selected">Selected</option>
-            <option value="rejected">Rejected</option>
+            <option value="rejected">Not Selected</option>
             <option value="waitlisted">Waitlisted</option>
           </select>
         </div>

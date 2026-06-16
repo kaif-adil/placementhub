@@ -5,7 +5,7 @@ import { createClient } from '../../lib/supabase'
 import { useParams } from 'next/navigation'
 
 export default function ExperiencePage() {
-  const params = useParams()          // gets the [id] from the URL
+  const params = useParams()
   const supabase = createClient()
   const [exp, setExp] = useState<any>(null)
   const [loading, setLoading] = useState(true)
@@ -20,8 +20,8 @@ export default function ExperiencePage() {
     const { data } = await supabase
       .from('experiences')
       .select('*, companies(name, slug)')
-      .eq('id', params.id)         // fetch only this specific experience
-      .single()                     // expect exactly one result
+      .eq('id', params.id)
+      .single()
 
     if (data) {
       setExp(data)
@@ -31,18 +31,16 @@ export default function ExperiencePage() {
   }
 
   const handleUpvote = async () => {
-    if (upvoted) return   // prevent double upvote
+    if (upvoted) return
 
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) { alert('Sign in to upvote'); return }
 
-    // Insert upvote record
     const { error } = await supabase
       .from('upvotes')
       .insert({ experience_id: params.id, user_id: user.id })
 
     if (!error) {
-      // Increment the count on the experience row
       await supabase
         .from('experiences')
         .update({ upvote_count: upvoteCount + 1 })
@@ -68,14 +66,13 @@ export default function ExperiencePage() {
   return (
     <div className="max-w-3xl mx-auto px-4 py-10">
 
-      {/* Back link */}
-      <a   href="/search"
+      
+      <a  href="/search"
         className="inline-flex items-center gap-2 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-lg transition mb-8"
       >
         ← Back to Experiences
       </a>
 
-      {/* Header */}
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-gray-900 mb-1">
           {exp.companies?.name} — {exp.role}
@@ -84,14 +81,23 @@ export default function ExperiencePage() {
           <span>{exp.placement_year}</span>
           <span>·</span>
           <span>{exp.branch}</span>
+          {exp.placement_type && (
+            <>
+              <span>·</span>
+              <span className="capitalize">{exp.placement_type.replace('-', ' ')}</span>
+            </>
+          )}
           <span>·</span>
           <span className={exp.result === 'selected' ? 'text-green-600 font-medium' : 'text-red-500 font-medium'}>
             {exp.result}
           </span>
+          <span>·</span>
+          <span className="inline-flex items-center gap-1 text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">
+            🔒 Anonymous
+          </span>
         </div>
       </div>
 
-      {/* Rounds */}
       <div className="space-y-6 mb-10">
         <h2 className="text-base font-semibold text-gray-900">Interview Rounds</h2>
         {exp.rounds?.map((round: any, i: number) => (
@@ -125,7 +131,6 @@ export default function ExperiencePage() {
         ))}
       </div>
 
-      {/* General Tips */}
       {exp.tips && (
         <div className="mb-8 p-5 bg-amber-50 border border-amber-200 rounded-xl">
           <h2 className="text-sm font-semibold text-amber-800 mb-2">General Tips</h2>
@@ -133,7 +138,6 @@ export default function ExperiencePage() {
         </div>
       )}
 
-      {/* Upvote */}
       <button
         onClick={handleUpvote}
         disabled={upvoted}

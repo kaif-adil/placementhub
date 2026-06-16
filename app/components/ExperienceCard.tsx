@@ -12,6 +12,7 @@ type Props = {
     placement_year: number
     branch: string
     result: string
+    placement_type?: string
     upvote_count: number
     tips: string
     rounds: any[]
@@ -51,6 +52,12 @@ export default function ExperienceCard({ experience }: Props) {
         <span>{experience.placement_year}</span>
         <span>·</span>
         <span>{experience.branch}</span>
+        {experience.placement_type && (
+          <>
+            <span>·</span>
+            <span className="capitalize">{experience.placement_type.replace('-', ' ')}</span>
+          </>
+        )}
         <span>·</span>
         <span>{experience.rounds?.length || 0} rounds</span>
         <span>·</span>

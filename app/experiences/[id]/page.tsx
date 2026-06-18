@@ -78,6 +78,11 @@ export default function ExperiencePage() {
           {exp.companies?.name} — {exp.role}
         </h1>
         <div className="flex items-center gap-3 text-sm text-gray-500 flex-wrap">
+          <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
+            exp.experience_type === 'internship' ? 'bg-purple-100 text-purple-600' : 'bg-blue-100 text-blue-600'
+          }`}>
+            {exp.experience_type === 'internship' ? 'Internship' : 'Full-Time'}
+          </span>
           <span>{exp.placement_year}</span>
           <span>·</span>
           <span>{exp.branch}</span>
@@ -88,9 +93,19 @@ export default function ExperiencePage() {
             </>
           )}
           <span>·</span>
-          <span className={exp.result === 'selected' ? 'text-green-600 font-medium' : 'text-red-500 font-medium'}>
-            {exp.result === 'rejected' ? 'Not Selected' : exp.result}
-          </span>
+          {exp.experience_type === 'internship' ? (
+            <span className={
+              exp.internship_outcome === 'ppo_offered' ? 'text-green-600 font-medium'
+                : exp.internship_outcome === 'no_ppo' ? 'text-red-500 font-medium'
+                : 'text-amber-600 font-medium'
+            }>
+              {exp.internship_outcome === 'ppo_offered' ? 'PPO Offered' : exp.internship_outcome === 'no_ppo' ? 'No PPO' : 'Still Pursuing'}
+            </span>
+          ) : (
+            <span className={exp.result === 'selected' ? 'text-green-600 font-medium' : 'text-red-500 font-medium'}>
+              {exp.result === 'rejected' ? 'Not Selected' : exp.result}
+            </span>
+          )}
           <span>·</span>
           <span className="inline-flex items-center gap-1 text-xs bg-gray-100 text-gray-500 px-2 py-0.5 rounded-full">
             🔒 Anonymous

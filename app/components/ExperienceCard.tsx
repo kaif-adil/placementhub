@@ -13,6 +13,8 @@ type Props = {
     branch: string
     result: string
     placement_type?: string
+    experience_type?: string
+    internship_outcome?: string
     upvote_count: number
     tips: string
     rounds: any[]
@@ -23,11 +25,21 @@ type Props = {
 export default function ExperienceCard({ experience }: Props) {
 
   // Result badge color — green for selected, red for rejected, amber for waitlisted
-  const resultColor = {
-    selected:   'bg-green-100 text-green-700',
-    rejected:   'bg-red-100 text-red-600',
-    waitlisted: 'bg-amber-100 text-amber-700',
-  }[experience.result] || 'bg-gray-100 text-gray-600'
+    const internshipColors: Record<string, string> = {
+      ppo_offered: 'bg-green-100 text-green-700',
+      no_ppo:      'bg-red-100 text-red-600',
+      pursuing:    'bg-amber-100 text-amber-700',
+    }
+
+    const placementColors: Record<string, string> = {
+      selected:   'bg-green-100 text-green-700',
+      rejected:   'bg-red-100 text-red-600',
+      waitlisted: 'bg-amber-100 text-amber-700',
+    }
+
+    const resultColor = experience.experience_type === 'internship'
+      ? internshipColors[experience.internship_outcome || ''] || 'bg-gray-100 text-gray-600'
+      : placementColors[experience.result] || 'bg-gray-100 text-gray-600'
 
   return (
     <a
@@ -36,12 +48,23 @@ export default function ExperienceCard({ experience }: Props) {
     >
       {/* Top row: company name + result badge */}
       <div className="flex items-center justify-between mb-2">
-        <span className="font-semibold text-gray-900 text-base">
-          {experience.companies?.name}
-        </span>
+        <div className="flex items-center gap-2">
+          <span className="font-semibold text-gray-900 text-base">
+            {experience.companies?.name}
+          </span>
+          <span className={`text-xs font-medium px-2 py-0.5 rounded-full ${
+            experience.experience_type === 'internship'
+              ? 'bg-purple-100 text-purple-600'
+              : 'bg-blue-100 text-blue-600'
+          }`}>
+            {experience.experience_type === 'internship' ? 'Internship' : 'Full-Time'}
+          </span>
+        </div>
         <span className={`text-xs font-medium px-2 py-1 rounded-full ${resultColor}`}>
-          {experience.result === 'rejected' ? 'Not Selected' : experience.result}
-        </span>
+          {experience.experience_type === 'internship'
+            ? (experience.internship_outcome === 'ppo_offered' ? 'PPO Offered' : experience.internship_outcome === 'no_ppo' ? 'No PPO' : 'Pursuing')
+            : (experience.result === 'rejected' ? 'Not Selected' : experience.result)}
+      </span>
       </div>
 
       {/* Role */}

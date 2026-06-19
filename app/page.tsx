@@ -28,7 +28,7 @@ function HomeContent() {
     <main className="max-w-3xl mx-auto px-4 py-16 text-center">
 
       {showLoginMessage && (
-        <div className="mb-8 bg-amber-50 border border-amber-200 text-amber-800 text-sm px-4 py-3 rounded-lg flex items-center justify-between flex-wrap gap-2">
+        <div className="mb-8 bg-amber-50 dark:bg-amber-950 border border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-300 text-sm px-4 py-3 rounded-lg flex items-center justify-between flex-wrap gap-2">
           <span>Please sign in to share your experience.</span>
           <button
             onClick={handleSignIn}
@@ -39,10 +39,10 @@ function HomeContent() {
         </div>
       )}
 
-      <h1 className="text-4xl font-bold text-gray-900 mb-4">
+      <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
         Placement<span className="text-blue-600">Hub</span>
       </h1>
-      <p className="text-lg text-gray-500 mb-8">
+      <p className="text-lg text-gray-500 dark:text-[#8c9bb5] mb-8">
         Real placement experiences from NITW students.
         <br />
         Search by company, role, and year.
@@ -51,7 +51,7 @@ function HomeContent() {
         <a href="/search" className="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition">
           Browse Experiences
         </a>
-        <a href="/submit" className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition">
+        <a href="/submit" className="px-6 py-3 border border-gray-300 dark:border-[#3d3d3d] text-gray-700 dark:text-[#eff1f6] rounded-lg font-medium hover:bg-gray-50 dark:hover:bg-[#282828] transition">
           Share Yours
         </a>
       </div>

@@ -13,11 +13,10 @@ export default function CompanyPage() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    fetchCompanyData()
+    fetchCompanyData()  
   }, [])
 
   const fetchCompanyData = async () => {
-    // First fetch the company by slug
     const { data: companyData } = await supabase
       .from('companies')
       .select('*')
@@ -27,7 +26,6 @@ export default function CompanyPage() {
     if (!companyData) { setLoading(false); return }
     setCompany(companyData)
 
-    // Then fetch all experiences for this company
     const { data: expData } = await supabase
       .from('experiences')
       .select('*, companies(name, slug)')
@@ -39,28 +37,37 @@ export default function CompanyPage() {
     setLoading(false)
   }
 
-  if (loading) return <div className="max-w-4xl mx-auto px-4 py-10 text-gray-400">Loading...</div>
+  if (loading) return (
+    <div className="max-w-4xl mx-auto px-4 py-10 text-gray-400 dark:text-[#8c9bb5]">
+      Loading...
+    </div>
+  )
 
-  if (!company) return <div className="max-w-4xl mx-auto px-4 py-10 text-gray-400">Company not found.</div>
+  if (!company) return (
+    <div className="max-w-4xl mx-auto px-4 py-10 text-gray-400 dark:text-[#8c9bb5]">
+      Company not found.
+    </div>
+  )
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-10">
 
-      <a   href="/search"
-        className="inline-flex items-center gap-2 text-sm font-medium text-gray-600 bg-gray-100 hover:bg-gray-200 px-4 py-2 rounded-lg transition mb-8"
+      <a
+        href="/search"
+        className="inline-flex items-center gap-2 text-sm font-medium text-gray-600 dark:text-[#8c9bb5] bg-gray-100 dark:bg-[#282828] hover:bg-gray-200 dark:hover:bg-[#3d3d3d] px-4 py-2 rounded-lg transition mb-8"
       >
         ← Back to Experiences
       </a>
 
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">{company.name}</h1>
-        <p className="text-gray-500 text-sm">
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">{company.name}</h1>
+        <p className="text-gray-500 dark:text-[#8c9bb5] text-sm">
           {experiences.length} placement experience{experiences.length !== 1 ? 's' : ''} from NITW students
         </p>
       </div>
 
       {experiences.length === 0 ? (
-        <div className="text-center py-16 text-gray-400">
+        <div className="text-center py-16 text-gray-400 dark:text-[#8c9bb5]">
           <p>No experiences yet for {company.name}.</p>
           <a href="/submit" className="text-blue-500 underline text-sm mt-2 block">
             Be the first to share yours

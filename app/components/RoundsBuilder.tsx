@@ -43,10 +43,13 @@ export default function RoundsBuilder({ rounds, onChange }: Props) {
     onChange(updated)
   }
 
+  const inputClass = "border border-gray-300 dark:border-[#3d3d3d] bg-white dark:bg-[#282828] text-gray-900 dark:text-[#eff1f6] rounded-md px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+  const labelClass = "block text-xs font-medium text-gray-600 dark:text-[#8c9bb5] mb-1"
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-base font-semibold text-gray-900">Interview Rounds</h2>
+        <h2 className="text-base font-semibold text-gray-900 dark:text-white">Interview Rounds</h2>
         <button
           onClick={addRound}
           className="text-sm text-blue-600 hover:text-blue-700 font-medium"
@@ -56,18 +59,18 @@ export default function RoundsBuilder({ rounds, onChange }: Props) {
       </div>
 
       {rounds.map((round, rIndex) => (
-        <div key={rIndex} className="border border-gray-200 rounded-lg p-4 space-y-4 bg-gray-50">
+        <div key={rIndex} className="border border-gray-200 dark:border-[#3d3d3d] rounded-lg p-4 space-y-4 bg-gray-50 dark:bg-[#282828]">
 
           {/* Round header */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <span className="text-xs font-medium text-gray-500 uppercase tracking-wide">
+              <span className="text-xs font-medium text-gray-500 dark:text-[#8c9bb5] uppercase tracking-wide">
                 Round {rIndex + 1}
               </span>
               <select
                 value={round.type}
                 onChange={(e) => updateRound(rIndex, 'type', e.target.value)}
-                className="border border-gray-300 rounded-md px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="border border-gray-300 dark:border-[#3d3d3d] bg-white dark:bg-[#282828] text-gray-900 dark:text-[#eff1f6] rounded-md px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 {ROUND_TYPES.map(t => (
                   <option key={t} value={t}>{t}</option>
@@ -88,13 +91,13 @@ export default function RoundsBuilder({ rounds, onChange }: Props) {
           {/* Platform (OA only) */}
           {round.type === 'OA' && (
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">Platform</label>
+              <label className={labelClass}>Platform</label>
               <input
                 type="text"
                 placeholder="e.g. HackerRank, CodeSignal, HackerEarth"
                 value={round.platform || ''}
                 onChange={(e) => updateRound(rIndex, 'platform', e.target.value)}
-                className="w-full border border-gray-300 rounded-md px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className={`w-full ${inputClass}`}
               />
             </div>
           )}
@@ -102,13 +105,13 @@ export default function RoundsBuilder({ rounds, onChange }: Props) {
           {/* Duration — hidden for Resume Shortlisting */}
           {round.type !== 'Resume Shortlisting' && (
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">Duration (minutes)</label>
+              <label className={labelClass}>Duration (minutes)</label>
               <input
                 type="number"
                 placeholder="e.g. 90"
                 value={round.duration_mins || ''}
                 onChange={(e) => updateRound(rIndex, 'duration_mins', Number(e.target.value))}
-                className="w-32 border border-gray-300 rounded-md px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className={`w-32 ${inputClass}`}
               />
             </div>
           )}
@@ -117,7 +120,7 @@ export default function RoundsBuilder({ rounds, onChange }: Props) {
           {round.type !== 'Resume Shortlisting' && (
             <div>
               <div className="flex items-center justify-between mb-2">
-                <label className="text-xs font-medium text-gray-600">Types of Questions Asked</label>
+                <label className="text-xs font-medium text-gray-600 dark:text-[#8c9bb5]">Types of Questions Asked</label>
                 <button
                   onClick={() => addQuestion(rIndex)}
                   className="text-xs text-blue-600 hover:text-blue-700"
@@ -133,7 +136,7 @@ export default function RoundsBuilder({ rounds, onChange }: Props) {
                       placeholder={`Question ${qIndex + 1}`}
                       value={q}
                       onChange={(e) => updateQuestion(rIndex, qIndex, e.target.value)}
-                      className="flex-1 border border-gray-300 rounded-md px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className={`flex-1 ${inputClass}`}
                     />
                     {round.questions.length > 1 && (
                       <button
@@ -152,13 +155,13 @@ export default function RoundsBuilder({ rounds, onChange }: Props) {
           {/* Tips — hidden for Resume Shortlisting */}
           {round.type !== 'Resume Shortlisting' && (
             <div>
-              <label className="block text-xs font-medium text-gray-600 mb-1">Tips for this round</label>
+              <label className={labelClass}>Tips for this round</label>
               <textarea
                 rows={2}
                 placeholder="What would you tell someone about this specific round?"
                 value={round.tips}
                 onChange={(e) => updateRound(rIndex, 'tips', e.target.value)}
-                className="w-full border border-gray-300 rounded-md px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className={`w-full ${inputClass}`}
               />
             </div>
           )}

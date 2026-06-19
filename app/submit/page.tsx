@@ -106,10 +106,16 @@ export default function SubmitPage() {
     ? companyId && role && branch && result && placementType
     : companyId && role && branch && internshipOutcome && placementType
 
+  const labelClass = "block text-sm font-medium text-gray-700 dark:text-[#eff1f6] mb-1"
+  const inputClass = "w-full border border-gray-300 dark:border-[#3d3d3d] bg-white dark:bg-[#282828] text-gray-900 dark:text-[#eff1f6] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+  const selectClass = "w-full border border-gray-300 dark:border-[#3d3d3d] bg-white dark:bg-[#282828] text-gray-900 dark:text-[#eff1f6] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+  const btnOutline = "px-6 py-2 border border-gray-300 dark:border-[#3d3d3d] text-gray-600 dark:text-[#eff1f6] rounded-lg text-sm hover:bg-gray-50 dark:hover:bg-[#282828] transition"
+  const draftBtn = "text-sm text-gray-500 dark:text-[#8c9bb5] hover:text-gray-700 dark:hover:text-gray-200"
+
   return (
     <div className="max-w-2xl mx-auto px-4 py-10">
-      <h1 className="text-2xl font-bold text-gray-900 mb-2">Share Your Experience</h1>
-      <p className="text-gray-500 mb-8">Help your juniors prepare better. Takes 5 minutes.</p>
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Share Your Experience</h1>
+      <p className="text-gray-500 dark:text-[#8c9bb5] mb-8">Help your juniors prepare better. Takes 5 minutes.</p>
 
       {step > 0 && (
         <div className="flex items-center gap-2 mb-10">
@@ -118,13 +124,13 @@ export default function SubmitPage() {
               <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold
                 ${step === s ? 'bg-blue-600 text-white' :
                   step > s ? 'bg-green-500 text-white' :
-                  'bg-gray-200 text-gray-500'}`}>
+                  'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-[#8c9bb5]'}`}>
                 {step > s ? '✓' : s}
               </div>
-              <span className={`text-sm ${step === s ? 'text-blue-600 font-medium' : 'text-gray-400'}`}>
+              <span className={`text-sm ${step === s ? 'text-blue-600 font-medium' : 'text-gray-400 dark:text-[#8c9bb5]'}`}>
                 {s === 1 ? 'Company & Role' : s === 2 ? 'Interview Rounds' : 'Final Tips'}
               </span>
-              {s < 3 && <div className="w-8 h-px bg-gray-300 mx-1" />}
+              {s < 3 && <div className="w-8 h-px bg-gray-300 dark:bg-gray-700 mx-1" />}
             </div>
           ))}
         </div>
@@ -132,21 +138,21 @@ export default function SubmitPage() {
 
       {step === 0 && (
         <div className="space-y-4">
-          <p className="text-sm font-medium text-gray-700 mb-2">What are you sharing? *</p>
+          <p className="text-sm font-medium text-gray-700 dark:text-[#eff1f6] mb-2">What are you sharing? *</p>
           <div className="grid grid-cols-2 gap-4">
             <button
               onClick={() => { setExperienceType('internship'); setStep(1) }}
-              className="p-6 border-2 border-gray-200 rounded-xl text-left hover:border-blue-400 hover:bg-blue-50 transition"
+              className="p-6 border-2 border-gray-200 dark:border-[#3d3d3d] rounded-xl text-left hover:border-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950 transition"
             >
-              <p className="font-semibold text-gray-900 mb-1">Internship</p>
-              <p className="text-xs text-gray-500">Summer/winter internship, with or without a PPO outcome</p>
+              <p className="font-semibold text-gray-900 dark:text-white mb-1">Internship</p>
+              <p className="text-xs text-gray-500 dark:text-[#8c9bb5]">Summer/winter internship, with or without a PPO outcome</p>
             </button>
             <button
               onClick={() => { setExperienceType('fulltime'); setStep(1) }}
-              className="p-6 border-2 border-gray-200 rounded-xl text-left hover:border-blue-400 hover:bg-blue-50 transition"
+              className="p-6 border-2 border-gray-200 dark:border-[#3d3d3d] rounded-xl text-left hover:border-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950 transition"
             >
-              <p className="font-semibold text-gray-900 mb-1">Full-Time Placement</p>
-              <p className="text-xs text-gray-500">On-campus or off-campus full-time hiring process</p>
+              <p className="font-semibold text-gray-900 dark:text-white mb-1">Full-Time Placement</p>
+              <p className="text-xs text-gray-500 dark:text-[#8c9bb5]">On-campus or off-campus full-time hiring process</p>
             </button>
           </div>
         </div>
@@ -155,55 +161,46 @@ export default function SubmitPage() {
       {step === 1 && (
         <div className="space-y-5">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Company *</label>
+            <label className={labelClass}>Company *</label>
             <CompanyCombobox
               onSelect={(id, name) => { setCompanyId(id); setCompanyName(name) }}
               initialName={companyName}
             />
-            <p className="text-xs text-gray-400 mt-1">
+            <p className="text-xs text-gray-400 dark:text-[#8c9bb5] mt-1">
               Type to search. If your company doesn't appear, type the name and click "+ Add".
             </p>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Role *</label>
+            <label className={labelClass}>Role *</label>
             <input
               type="text"
               placeholder="e.g. SDE Intern, SDE-1, Data Analyst"
               value={role}
               onChange={(e) => setRole(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className={inputClass}
             />
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className={labelClass}>
                 {experienceType === 'fulltime' ? 'Placement Year *' : 'Internship Year *'}
               </label>
-              <p className="text-xs text-gray-400 mb-1">
+              <p className="text-xs text-gray-400 dark:text-[#8c9bb5] mb-1">
                 {experienceType === 'fulltime'
                   ? "The year you appeared for this company's process"
                   : "The year you did this internship"}
               </p>
-              <select
-                value={placementYear}
-                onChange={(e) => setPlacementYear(Number(e.target.value))}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
+              <select value={placementYear} onChange={(e) => setPlacementYear(Number(e.target.value))} className={selectClass}>
                 {[2026, 2025, 2024, 2023, 2022].map(y => (
                   <option key={y} value={y}>{y}</option>
                 ))}
               </select>
             </div>
-
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Branch *</label>
-              <select
-                value={branch}
-                onChange={(e) => setBranch(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
+              <label className={labelClass}>Branch *</label>
+              <select value={branch} onChange={(e) => setBranch(e.target.value)} className={selectClass}>
                 <option value="">Select branch</option>
                 {['CSE', 'ECE', 'EEE', 'ME', 'CE', 'CHE', 'MME', 'BT', 'MNC'].map(b => (
                   <option key={b} value={b}>{b}</option>
@@ -213,7 +210,7 @@ export default function SubmitPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Placement Type *</label>
+            <label className={labelClass}>Placement Type *</label>
             <div className="flex gap-3">
               {['on-campus', 'off-campus'].map((t) => (
                 <button
@@ -222,7 +219,7 @@ export default function SubmitPage() {
                   className={`px-4 py-2 rounded-lg text-sm font-medium border transition
                     ${placementType === t
                       ? 'bg-blue-600 text-white border-blue-600'
-                      : 'border-gray-300 text-gray-600 hover:bg-gray-50'
+                      : 'border-gray-300 dark:border-[#3d3d3d] text-gray-600 dark:text-[#eff1f6] hover:bg-gray-50 dark:hover:bg-[#282828]'
                     }`}
                 >
                   {t === 'on-campus' ? 'On Campus' : 'Off Campus'}
@@ -233,7 +230,7 @@ export default function SubmitPage() {
 
           {experienceType === 'fulltime' && (
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Result *</label>
+              <label className={labelClass}>Result *</label>
               <div className="flex gap-3">
                 {['selected', 'rejected', 'waitlisted'].map((r) => (
                   <button
@@ -244,7 +241,7 @@ export default function SubmitPage() {
                         ? r === 'selected' ? 'bg-green-600 text-white border-green-600'
                           : r === 'rejected' ? 'bg-red-500 text-white border-red-500'
                           : 'bg-amber-500 text-white border-amber-500'
-                        : 'border-gray-300 text-gray-600 hover:bg-gray-50'
+                        : 'border-gray-300 dark:border-[#3d3d3d] text-gray-600 dark:text-[#eff1f6] hover:bg-gray-50 dark:hover:bg-[#282828]'
                       }`}
                   >
                     {r === 'rejected' ? 'Not Selected' : r.charAt(0).toUpperCase() + r.slice(1)}
@@ -256,7 +253,7 @@ export default function SubmitPage() {
 
           {experienceType === 'internship' && (
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Internship Outcome *</label>
+              <label className={labelClass}>Internship Outcome *</label>
               <div className="flex gap-3">
                 {['ppo_offered', 'no_ppo', 'pursuing'].map((o) => (
                   <button
@@ -267,7 +264,7 @@ export default function SubmitPage() {
                         ? o === 'ppo_offered' ? 'bg-green-600 text-white border-green-600'
                           : o === 'no_ppo' ? 'bg-red-500 text-white border-red-500'
                           : 'bg-amber-500 text-white border-amber-500'
-                        : 'border-gray-300 text-gray-600 hover:bg-gray-50'
+                        : 'border-gray-300 dark:border-[#3d3d3d] text-gray-600 dark:text-[#eff1f6] hover:bg-gray-50 dark:hover:bg-[#282828]'
                       }`}
                   >
                     {o === 'ppo_offered' ? 'PPO Offered' : o === 'no_ppo' ? 'No PPO' : 'Still Pursuing'}
@@ -278,14 +275,11 @@ export default function SubmitPage() {
           )}
 
           <div className="flex justify-between items-center pt-4">
-            <button
-              onClick={() => setStep(0)}
-              className="text-sm text-gray-500 hover:text-gray-700"
-            >
+            <button onClick={() => setStep(0)} className={draftBtn}>
               ← Change type
             </button>
             <div className="flex items-center gap-4">
-              <button onClick={saveDraft} className="text-sm text-gray-500 hover:text-gray-700">
+              <button onClick={saveDraft} className={draftBtn}>
                 {draftSaved ? '✓ Draft saved' : 'Save draft'}
               </button>
               <button
@@ -305,14 +299,9 @@ export default function SubmitPage() {
           <RoundsBuilder rounds={rounds} onChange={setRounds} />
 
           <div className="flex justify-between items-center pt-4">
-            <button
-              onClick={() => setStep(1)}
-              className="px-6 py-2 border border-gray-300 text-gray-600 rounded-lg text-sm hover:bg-gray-50 transition"
-            >
-              ← Back
-            </button>
+            <button onClick={() => setStep(1)} className={btnOutline}>← Back</button>
             <div className="flex items-center gap-4">
-              <button onClick={saveDraft} className="text-sm text-gray-500 hover:text-gray-700">
+              <button onClick={saveDraft} className={draftBtn}>
                 {draftSaved ? '✓ Draft saved' : 'Save draft'}
               </button>
               <button
@@ -330,48 +319,43 @@ export default function SubmitPage() {
       {step === 3 && (
         <div className="space-y-5">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">General Tips & Advice</label>
+            <label className={labelClass}>General Tips & Advice</label>
             <textarea
               rows={6}
               placeholder="What would you tell someone preparing for this company? What worked for you? What surprised you?"
               value={tips}
               onChange={(e) => setTips(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className={inputClass}
             />
           </div>
 
-          <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-            <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-3">Preview</p>
-            <p className="text-sm text-gray-700"><span className="font-medium">Type:</span> {experienceType === 'fulltime' ? 'Full-Time Placement' : 'Internship'}</p>
-            <p className="text-sm text-gray-700"><span className="font-medium">Company:</span> {companyName}</p>
-            <p className="text-sm text-gray-700"><span className="font-medium">Role:</span> {role}</p>
-            <p className="text-sm text-gray-700"><span className="font-medium">Year:</span> {placementYear}</p>
-            <p className="text-sm text-gray-700"><span className="font-medium">Branch:</span> {branch}</p>
-            <p className="text-sm text-gray-700"><span className="font-medium">Placement Type:</span> {placementType === 'on-campus' ? 'On Campus' : 'Off Campus'}</p>
+          <div className="bg-gray-50 dark:bg-[#282828] rounded-lg p-4 border border-gray-200 dark:border-[#3d3d3d]">
+            <p className="text-xs font-medium text-gray-500 dark:text-[#8c9bb5] uppercase tracking-wide mb-3">Preview</p>
+            <p className="text-sm text-gray-700 dark:text-[#eff1f6]"><span className="font-medium">Type:</span> {experienceType === 'fulltime' ? 'Full-Time Placement' : 'Internship'}</p>
+            <p className="text-sm text-gray-700 dark:text-[#eff1f6]"><span className="font-medium">Company:</span> {companyName}</p>
+            <p className="text-sm text-gray-700 dark:text-[#eff1f6]"><span className="font-medium">Role:</span> {role}</p>
+            <p className="text-sm text-gray-700 dark:text-[#eff1f6]"><span className="font-medium">Year:</span> {placementYear}</p>
+            <p className="text-sm text-gray-700 dark:text-[#eff1f6]"><span className="font-medium">Branch:</span> {branch}</p>
+            <p className="text-sm text-gray-700 dark:text-[#eff1f6]"><span className="font-medium">Placement Type:</span> {placementType === 'on-campus' ? 'On Campus' : 'Off Campus'}</p>
             {experienceType === 'fulltime' ? (
-              <p className="text-sm text-gray-700"><span className="font-medium">Result:</span> {result === 'rejected' ? 'Not Selected' : result}</p>
+              <p className="text-sm text-gray-700 dark:text-[#eff1f6]"><span className="font-medium">Result:</span> {result === 'rejected' ? 'Not Selected' : result}</p>
             ) : (
-              <p className="text-sm text-gray-700">
+              <p className="text-sm text-gray-700 dark:text-[#eff1f6]">
                 <span className="font-medium">Outcome:</span>{' '}
                 {internshipOutcome === 'ppo_offered' ? 'PPO Offered' : internshipOutcome === 'no_ppo' ? 'No PPO' : 'Still Pursuing'}
               </p>
             )}
-            <p className="text-sm text-gray-700"><span className="font-medium">Rounds:</span> {rounds.length}</p>
+            <p className="text-sm text-gray-700 dark:text-[#eff1f6]"><span className="font-medium">Rounds:</span> {rounds.length}</p>
           </div>
 
           {error && (
-            <p className="text-sm text-red-600 bg-red-50 px-4 py-2 rounded-lg">{error}</p>
+            <p className="text-sm text-red-600 bg-red-50 dark:bg-red-950 px-4 py-2 rounded-lg">{error}</p>
           )}
 
           <div className="flex justify-between items-center pt-4">
-            <button
-              onClick={() => setStep(2)}
-              className="px-6 py-2 border border-gray-300 text-gray-600 rounded-lg text-sm hover:bg-gray-50 transition"
-            >
-              ← Back
-            </button>
+            <button onClick={() => setStep(2)} className={btnOutline}>← Back</button>
             <div className="flex items-center gap-4">
-              <button onClick={saveDraft} className="text-sm text-gray-500 hover:text-gray-700">
+              <button onClick={saveDraft} className={draftBtn}>
                 {draftSaved ? '✓ Draft saved' : 'Save draft'}
               </button>
               <button

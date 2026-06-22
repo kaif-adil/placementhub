@@ -7,13 +7,31 @@ import { createClient } from './lib/supabase'
 function HomeContent() {
   const searchParams = useSearchParams()
   const [showLoginMessage, setShowLoginMessage] = useState(false)
+  const [stats, setStats] = useState({ experiences: 0, companies: 0 })
   const supabase = createClient()
 
   useEffect(() => {
     if (searchParams.get('login_required') === 'true') {
       setShowLoginMessage(true)
     }
+    fetchStats()
   }, [searchParams])
+
+  const fetchStats = async () => {
+    const { count: expCount } = await supabase
+      .from('experiences')
+      .select('*', { count: 'exact', head: true })
+      .eq('status', 'published')
+
+    const { count: compCount } = await supabase
+      .from('companies')
+      .select('*', { count: 'exact', head: true })
+
+    setStats({
+      experiences: expCount || 0,
+      companies: compCount || 0,
+    })
+  }
 
   const handleSignIn = async () => {
     await supabase.auth.signInWithOAuth({
@@ -47,6 +65,27 @@ function HomeContent() {
         <br />
         Search by company, role, and year.
       </p>
+
+      {/* Stats */}
+      {stats.experiences > 0 && (
+        <div className="flex items-center justify-center gap-8 mb-10">
+          <div>
+            <p className="text-3xl font-bold text-gray-900 dark:text-white">{stats.experiences}</p>
+            <p className="text-sm text-gray-500 dark:text-[#8c9bb5] mt-1">Experiences</p>
+          </div>
+          <div className="w-px h-10 bg-gray-200 dark:bg-[#3d3d3d]" />
+          <div>
+            <p className="text-3xl font-bold text-gray-900 dark:text-white">{stats.companies}</p>
+            <p className="text-sm text-gray-500 dark:text-[#8c9bb5] mt-1">Companies</p>
+          </div>
+          <div className="w-px h-10 bg-gray-200 dark:bg-[#3d3d3d]" />
+          <div>
+            <p className="text-3xl font-bold text-gray-900 dark:text-white">NITW</p>
+            <p className="text-sm text-gray-500 dark:text-[#8c9bb5] mt-1">Students Only</p>
+          </div>
+        </div>
+      )}
+
       <div className="flex items-center justify-center gap-4">
         <a href="/search" className="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition">
           Browse Experiences
@@ -55,6 +94,7 @@ function HomeContent() {
           Share Yours
         </a>
       </div>
+
     </main>
   )
 }

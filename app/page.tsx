@@ -94,7 +94,6 @@ function HomeContent() {
           Share Yours
         </a>
       </div>
-
     </main>
   )
 }

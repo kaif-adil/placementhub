@@ -32,10 +32,32 @@ export default function RootLayout({
           `
         }} />
       </head>
-      <body className={geist.className}>
-        <ThemeProvider>
+      <body className={`${geist.className} flex flex-col min-h-screen`}>
+ <ThemeProvider>
           <Navbar />
-          {children}
+          <main className="flex-1">
+            {children}
+          </main>
+          <footer className="border-t border-gray-200 dark:border-[#3d3d3d] mt-16 py-8 text-center">
+            <p className="text-sm text-gray-400 dark:text-[#8c9bb5]">
+              Built for NITW students ·{' '}
+              <a
+                href="https://github.com/kaif-adil"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-blue-500 transition"
+              >
+                GitHub
+              </a>
+              {' '}·{' '}
+              <a
+                href="/feedback"
+                className="hover:text-blue-500 transition"
+              >
+                Feedback
+              </a>
+            </p>
+          </footer>
         </ThemeProvider>
       </body>
     </html>

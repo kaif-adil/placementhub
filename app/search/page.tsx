@@ -20,43 +20,38 @@ export default function SearchPage() {
   }, [search, year, branch, result, experienceType])
 
   const fetchExperiences = async () => {
-    setLoading(true)
+  setLoading(true)
 
-    let companyIds: string[] = []
-    if (search.trim()) {
-      const { data: matchingCompanies } = await supabase
-        .from('companies')
-        .select('id')
-        .ilike('name', `%${search.trim()}%`)
+  let query = supabase
+    .from('experiences')
+    .select('*, companies(name, slug)')
+    .eq('status', 'published')
+    .order('created_at', { ascending: false })
 
-      if (matchingCompanies && matchingCompanies.length > 0) {
-        companyIds = matchingCompanies.map(c => c.id)
-      }
+  if (year)           query = query.eq('placement_year', parseInt(year))
+  if (branch)         query = query.eq('branch', branch)
+  if (result)         query = query.eq('result', result)
+  if (experienceType) query = query.eq('experience_type', experienceType)
+
+  if (search.trim()) {
+    const { data: matchingCompanies } = await supabase
+      .from('companies')
+      .select('id')
+      .ilike('name', `%${search.trim()}%`)
+
+    const companyIds = matchingCompanies?.map(c => c.id) || []
+
+    if (companyIds.length > 0) {
+      query = query.in('company_id', companyIds)
+    } else {
+      query = query.ilike('role', `%${search.trim()}%`)
     }
-
-    let query = supabase
-      .from('experiences')
-      .select('*, companies(name, slug)')
-      .eq('status', 'published')
-      .order('created_at', { ascending: false })
-
-    if (year)   query = query.eq('placement_year', parseInt(year))
-    if (branch) query = query.eq('branch', branch)
-    if (result) query = query.eq('result', result)
-    if (experienceType) query = query.eq('experience_type', experienceType)
-
-    if (search.trim()) {
-      if (companyIds.length > 0) {
-        query = query.in('company_id', companyIds)
-      } else {
-        query = query.ilike('role', `%${search.trim()}%`)
-      }
-    }
-
-    const { data } = await query.limit(50)
-    setExperiences(data || [])
-    setLoading(false)
   }
+
+  const { data } = await query.limit(50)
+  setExperiences(data || [])
+  setLoading(false)
+}
 
   const selectClass = "border border-gray-300 dark:border-[#3d3d3d] bg-white dark:bg-[#282828] text-gray-700 dark:text-[#eff1f6] rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
 

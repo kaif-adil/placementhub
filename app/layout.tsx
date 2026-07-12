@@ -42,7 +42,7 @@ export default function RootLayout({
             <p className="text-sm text-gray-400 dark:text-[#8c9bb5]">
               Built for NITW students ·{' '}
               <a
-                href="https://github.com/kaif-adil"
+                href="https://github.com/kaif-adil/placementhub"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-blue-500 transition"

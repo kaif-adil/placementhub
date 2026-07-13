@@ -3,6 +3,7 @@ import { Geist } from 'next/font/google'
 import './globals.css'
 import Navbar from './components/Navbar'
 import ThemeProvider from './components/ThemeProvider'
+import { Analytics } from '@vercel/analytics/react'
 
 const geist = Geist({ subsets: ['latin'] })
 
@@ -58,6 +59,7 @@ export default function RootLayout({
               </a>
             </p>
           </footer>
+          <Analytics />
         </ThemeProvider>
       </body>
     </html>

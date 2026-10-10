@@ -80,7 +80,7 @@ export default function SearchPage() {
 
           <select value={year} onChange={(e) => setYear(e.target.value)} className={selectClass}>
             <option value="">All Years</option>
-            {[2026, 2025, 2024, 2023, 2022].map(y => (
+            {[2028, 2027, 2026, 2025, 2024, 2023, 2022].map(y => (
               <option key={y} value={y}>{y}</option>
             ))}
           </select>

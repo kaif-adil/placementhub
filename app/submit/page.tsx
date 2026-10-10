@@ -193,7 +193,7 @@ export default function SubmitPage() {
                   : "The year you did this internship"}
               </p>
               <select value={placementYear} onChange={(e) => setPlacementYear(Number(e.target.value))} className={selectClass}>
-                {[2026, 2025, 2024, 2023, 2022].map(y => (
+                {[2028, 2027, 2026, 2025, 2024, 2023, 2022].map(y => (
                   <option key={y} value={y}>{y}</option>
                 ))}
               </select>
